@@ -6204,6 +6204,8 @@ fi
 # tab's original project directory.
 spawn_enter_recorded_worktree
 spawn_assert_agent_worktree
+# Fork-carried (CARRY.md): place this home's private overlay for the project.
+[ "$KIND" = secondmate ] || "$SCRIPT_DIR/fm-overlay.sh" apply "$DATA" "$PROJ_ABS" "$WT" || exit 1
 
 # Pre-register Claude's workspace trust for the directory this launch starts in,
 # at the first point that directory is known and before any per-task state is

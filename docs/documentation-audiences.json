@@ -306,6 +306,10 @@
       "audience": "agent-runtime"
     },
     {
+      "path": "CARRY.md",
+      "audience": "maintainer-architecture"
+    },
+    {
       "path": "CLAUDE.md",
       "audience": "agent-runtime"
     },
@@ -447,6 +451,10 @@
     },
     {
       "path": "docs/orca-backend.md",
+      "audience": "operator-current"
+    },
+    {
+      "path": "docs/overlays.md",
       "audience": "operator-current"
     },
     {

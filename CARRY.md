@@ -40,5 +40,25 @@ Upstream files touched:
 
 Verification entry point: `bash tests/fm-overlay.test.sh`.
 
+### Claude worker plugins
+
+A home's `config/claude-worker-disabled-plugins` keeps the listed Claude Code plugins off in every Claude session Firstmate launches.
+[`docs/claude-worker-plugins.md`](docs/claude-worker-plugins.md) owns the operator contract.
+
+New files:
+
+- `bin/fm-claude-disabled-plugins.sh`
+- `tests/fm-claude-disabled-plugins.test.sh`
+- `docs/claude-worker-plugins.md`
+
+Upstream files touched:
+
+- `bin/fm-spawn.sh`: one call to `bin/fm-claude-disabled-plugins.sh fragment`, with its one-line comment, at each of the two Claude `--settings` builders (the inline worker JSON and the secondmate settings file), each appending its output to that JSON.
+- `bin/fm-supervision-engine-lib.sh`: one call to `bin/fm-claude-disabled-plugins.sh json`, with its one-line comment, adding `--settings` to the headless Claude engine turn, plus `settings` in that function's `local` list.
+- `bin/fm-config-inherit-lib.sh`: `claude-worker-disabled-plugins` appended to `FM_INHERITABLE_CONFIG`.
+- `docs/documentation-audiences.json`: the inventory entry for `docs/claude-worker-plugins.md`.
+
+Verification entry point: `bash tests/fm-claude-disabled-plugins.test.sh`.
+
 `bin/fm-test-run.sh --check-coverage` reports `tests/fm-overlay.test.sh` as an unmeasured serial member and can tip the unhinted share over its bound.
 That is deliberate: the hint table in `bin/fm-test-run.sh` changes often upstream, so a carried hint line would add a recurring merge conflict, and CI runs only on `main`, never on `carry`.

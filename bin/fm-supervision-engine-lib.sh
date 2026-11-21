@@ -340,7 +340,7 @@ _fm_engine_reap() {
 # an engine its crashed predecessor left running.
 fm_supervision_engine_turn() {
   local engine=$1 model=$2 prompt=$3 message=$4 session=$5 mode=$6 timeout=$7 result=$8 errors=$9
-  local pid_file=${10:-} bin grace i ledger watched rc home_phys root_phys state_phys identity recorded
+  local pid_file=${10:-} settings bin grace i ledger watched rc home_phys root_phys state_phys identity recorded
   local -a args
   bin=$(fm_supervision_engine_bin "$engine" 2>"$errors") || return 127
   case "$timeout" in ''|0*|*[!0-9]*) timeout=1200 ;; esac
@@ -364,6 +364,9 @@ fm_supervision_engine_turn() {
         "$home_phys"/*|"$root_phys"/*) ;;
         *) args+=(--add-dir "$state_phys") ;;
       esac
+      # Carried patch: plugins config/claude-worker-disabled-plugins keeps off (CARRY.md).
+      settings=$("$FM_ROOT/bin/fm-claude-disabled-plugins.sh" json "${CONFIG:-$FM_HOME/config}" 2>"$errors") || return 127
+      [ -z "$settings" ] || args+=(--settings "$settings")
       if [ "$mode" = new ]; then
         args+=(--session-id "$session")
       else

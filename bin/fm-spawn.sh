@@ -6585,7 +6585,9 @@ BUSY_GEN=
       if [ "$KEEP_AI_TRAILERS" != 1 ]; then
         session_keys='"feedbackDrafts":"off","attribution":{"commit":"","pr":"","sessionUrl":false},'
       fi
-      printf '{%s%s}\n' "$session_keys" "$hooks_json" >"$STATE_REAL/$ID.claude-settings.json"
+      # Carried patch: plugins config/claude-worker-disabled-plugins keeps off (CARRY.md).
+      disabled_plugins=$("$SCRIPT_DIR/fm-claude-disabled-plugins.sh" fragment "$CONFIG") || exit 1
+      printf '{%s%s%s}\n' "$session_keys" "$hooks_json" "$disabled_plugins" >"$STATE_REAL/$ID.claude-settings.json"
     else
       mkdir -p "$WT/.claude"
       printf '{%s}\n' "$hooks_json" >"$WT/.claude/settings.local.json"
@@ -7566,7 +7568,9 @@ case "$LAUNCH" in
   if [ "$KIND" = secondmate ]; then
     LAUNCH=${LAUNCH//__CLAUDESETTINGS__/$(shell_quote "$STATE_REAL/$ID.claude-settings.json")}
   else
-    claude_settings="'{\"feedbackDrafts\":\"off\"__CLAUDEATTRIBUTION__}'"
+    # Carried patch: plugins config/claude-worker-disabled-plugins keeps off (CARRY.md).
+    disabled_plugins=$("$SCRIPT_DIR/fm-claude-disabled-plugins.sh" fragment "$CONFIG") || exit 1
+    claude_settings="'{\"feedbackDrafts\":\"off\"__CLAUDEATTRIBUTION__$disabled_plugins}'"
     LAUNCH=${LAUNCH//__CLAUDESETTINGS__/$claude_settings}
   fi
   ;;

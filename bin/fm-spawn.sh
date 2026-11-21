@@ -3565,6 +3565,14 @@ if [ "$BACKEND" = t3code ]; then
     echo "error: backend=t3code cannot apply config/launch-env-allowlist because T3 starts the agent with its provider instance's environment; remove that file or choose another backend" >&2
     exit 1
   fi
+  if [ "$HARNESS" = claude ]; then
+    # Carried patch: plugins config/claude-worker-disabled-plugins keeps off (CARRY.md).
+    disabled_plugins=$("$SCRIPT_DIR/fm-claude-disabled-plugins.sh" fragment "$CONFIG") || exit 1
+    if [ -n "$disabled_plugins" ]; then
+      echo "error: backend=t3code cannot apply config/claude-worker-disabled-plugins because T3 starts claude with its own settings; remove that file or choose another backend" >&2
+      exit 1
+    fi
+  fi
   if [ -n "$WORKER_ACCOUNT" ]; then
     echo "error: backend=t3code cannot apply the $HARNESS worker account pin because T3's provider instance owns the account; select that instance in config/t3code-instances instead" >&2
     exit 1

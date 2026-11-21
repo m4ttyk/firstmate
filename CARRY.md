@@ -53,8 +53,8 @@ New files:
 
 Upstream files touched:
 
-- `bin/fm-spawn.sh`: one call to `bin/fm-claude-disabled-plugins.sh fragment`, with its one-line comment, at each of the two Claude `--settings` builders (the inline worker JSON and the secondmate settings file), each appending its output to that JSON.
-- `bin/fm-supervision-engine-lib.sh`: one call to `bin/fm-claude-disabled-plugins.sh json`, with its one-line comment, adding `--settings` to the headless Claude engine turn, plus `settings` in that function's `local` list.
+- `bin/fm-spawn.sh`: one call to `bin/fm-claude-disabled-plugins.sh fragment`, with its one-line comment, at each of the two Claude `--settings` builders (the inline worker JSON and the secondmate settings file), each appending its output to that JSON, and one more call, with its one-line comment, in the `backend=t3code` guard block that refuses a Claude launch when the output is non-empty.
+- `tests/fm-backend-t3code.test.sh`: one `test_spawn_refuses_launch_settings_t3_cannot_honor claude-worker-disabled-plugins` line in its run list.
 - `bin/fm-config-inherit-lib.sh`: `claude-worker-disabled-plugins` appended to `FM_INHERITABLE_CONFIG`.
 - `docs/documentation-audiences.json`: the inventory entry for `docs/claude-worker-plugins.md`.
 

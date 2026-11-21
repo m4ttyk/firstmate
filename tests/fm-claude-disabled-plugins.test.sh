@@ -3,12 +3,11 @@
 # keeps off in the Claude sessions Firstmate launches
 # (docs/claude-worker-plugins.md):
 #   - an absent or id-less file prints nothing
-#   - listed ids become enabledPlugins entries set to false, in both forms
+#   - listed ids become enabledPlugins entries set to false
 #   - a malformed id is refused with its file and line
 #   - a claude worker spawn carries the entries in its --settings JSON, and a
 #     spawn without the file keeps today's settings
 #   - a malformed file stops the spawn
-#   - the supervision host's headless engine passes the same settings
 set -u
 
 # shellcheck source=tests/fixtures.sh
@@ -32,7 +31,7 @@ test_absent_and_empty_files_print_nothing() {
   expect_code 0 "$RC" "absent: an absent file must succeed"
   assert_equals '' "$OUT" "absent: an absent file printed settings"
   printf '\n# only a comment\n   \n' > "$cfg/claude-worker-disabled-plugins"
-  run_tool json "$cfg"
+  run_tool fragment "$cfg"
   expect_code 0 "$RC" "empty: a file with no ids must succeed"
   assert_equals '' "$OUT" "empty: a file with no ids printed settings"
   pass "an absent or id-less file prints nothing"
@@ -47,9 +46,6 @@ test_listed_ids_become_disabled_entries() {
   expect_code 0 "$RC" "listed: fragment must succeed"$'\n'"$ERR"
   assert_equals ',"enabledPlugins":{"demo-tools@demo-market":false,"other.plugin_2@demo-market":false}' "$OUT" \
     "listed: fragment is not the expected JSON member"
-  run_tool json "$cfg"
-  printf '%s' "$OUT" | jq -e '.enabledPlugins == {"demo-tools@demo-market":false,"other.plugin_2@demo-market":false}' >/dev/null \
-    || fail "listed: json is not the expected settings object: $OUT"
   pass "listed ids become enabledPlugins entries set to false"
 }
 
@@ -118,41 +114,10 @@ test_spawn_stops_on_malformed_file() {
   pass "a malformed file stops the spawn"
 }
 
-# engine_args <case> <list>: run one headless supervision-engine turn against a
-# fake claude that records its arguments; prints the recorded --settings value.
-engine_args() {
-  local home="$TMP_ROOT/$1" engine
-  mkdir -p "$home/config" "$home/state"
-  [ -z "$2" ] || printf '%s\n' "$2" > "$home/config/claude-worker-disabled-plugins"
-  engine="$home/claude"
-  printf '#!/bin/sh\nfor a in "$@"; do printf "%%s\\n" "$a"; done > "%s/args"\nprintf "{}"\n' "$home" > "$engine"
-  chmod +x "$engine"
-  printf 'hello\n' > "$home/message"
-  printf 'prompt\n' > "$home/prompt"
-  (
-    FM_ROOT=$ROOT FM_HOME=$home STATE=$home/state CONFIG=$home/config
-    FM_SUPERVISION_ENGINE_CLAUDE_BIN=$engine
-    . "$ROOT/bin/fm-wake-lib.sh"
-    . "$ROOT/bin/fm-timeout-lib.sh"
-    . "$ROOT/bin/fm-supervision-engine-lib.sh"
-    fm_supervision_engine_turn claude sonnet "$home/prompt" "$home/message" sid new 30 "$home/result" "$home/errors"
-  ) >/dev/null 2>&1
-  awk 'prev == "--settings" { print; exit } { prev = $0 }' "$home/args" 2>/dev/null
-}
-
-test_engine_turn_carries_disabled_plugins() {
-  assert_equals '{"enabledPlugins":{"demo-tools@demo-market":false}}' "$(engine_args engine-listed demo-tools@demo-market)" \
-    "engine-listed: the headless engine did not receive the settings"
-  assert_equals '' "$(engine_args engine-plain '')" "engine-plain: the headless engine received settings without the file"
-  grep -qx -- --safe-mode "$TMP_ROOT/engine-plain/args" || fail "engine-plain: the headless engine did not run"
-  pass "the supervision host's headless engine disables the listed plugins"
-}
-
 fm_test_run \
   test_absent_and_empty_files_print_nothing \
   test_listed_ids_become_disabled_entries \
   test_malformed_id_is_refused \
   test_spawn_carries_disabled_plugins \
   test_spawn_without_file_is_unchanged \
-  test_spawn_stops_on_malformed_file \
-  test_engine_turn_carries_disabled_plugins
+  test_spawn_stops_on_malformed_file

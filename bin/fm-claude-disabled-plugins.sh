@@ -4,7 +4,6 @@
 #
 # Usage:
 #   bin/fm-claude-disabled-plugins.sh fragment <config-dir>
-#   bin/fm-claude-disabled-plugins.sh json <config-dir>
 #   bin/fm-claude-disabled-plugins.sh --help
 #
 # docs/claude-worker-plugins.md owns the operator contract; this header owns
@@ -16,8 +15,6 @@
 #
 #   fragment  prints `,"enabledPlugins":{"<id>":false,...}` with no newline,
 #             for appending inside an existing settings JSON object.
-#   json      prints `{"enabledPlugins":{"<id>":false,...}}` with no newline,
-#             a complete --settings value.
 #
 # An absent file, or one with no ids, prints nothing and exits 0, so callers
 # stay byte-identical to a launch without this feature. An id outside
@@ -26,7 +23,7 @@
 # set also keeps every id safe inside single-quoted shell and JSON strings.
 set -u
 
-usage() { sed -n '2,25p' "$0" | sed 's/^# \{0,1\}//'; }
+usage() { sed -n '2,23p' "$0" | sed 's/^# \{0,1\}//'; }
 
 build() {
   local file=$1/claude-worker-disabled-plugins line n=0 out=
@@ -45,11 +42,10 @@ build() {
 }
 
 case "${1:-}" in
-  fragment | json)
+  fragment)
     [ $# -eq 2 ] || { usage >&2; exit 2; }
     body=$(build "$2") || exit 1
-    [ -n "$body" ] || exit 0
-    if [ "$1" = fragment ]; then printf ',%s' "$body"; else printf '{%s}' "$body"; fi
+    [ -z "$body" ] || printf ',%s' "$body"
     ;;
   -h | --help) usage ;;
   *) usage >&2; exit 2 ;;

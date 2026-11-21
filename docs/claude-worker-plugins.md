@@ -20,7 +20,9 @@ An absent file, or one with no ids, leaves every launch unchanged.
 ## What Firstmate does with it
 
 - Each listed id is added as `"enabledPlugins": {"<id>": false}` to the `--settings` Firstmate already passes, so the plugin does not load at all, including any output style it forces.
-- This covers ship and scout workers, secondmates, and the supervision host's headless engine; the captain's own session is never launched by Firstmate and is unaffected.
+- This covers ship and scout workers and secondmates; the captain's own session is never launched by Firstmate and is unaffected.
+- The supervision host's headless engine already runs with `--safe-mode`, which loads no plugins, so it needs no entry.
+- A `backend=t3code` Claude launch refuses while the file lists any id, because T3 starts Claude with its own settings.
 - An id that is not of the `<plugin>@<marketplace>` form is refused with the file and line, and the launch stops rather than run with the plugin on.
 - A primary home pushes the file to its secondmates like its other inherited config, so their own workers disable the same plugins.
 - The file affects Claude Code launches only; other worker runtimes ignore it.

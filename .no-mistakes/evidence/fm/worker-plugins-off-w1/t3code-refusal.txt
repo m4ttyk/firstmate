@@ -1,0 +1,10 @@
+# claude harness, plugin listed: must refuse
+ok - fm-spawn.sh --backend t3code claude: refuses config/claude-worker-disabled-plugins=mk-tools@cc-plugins it cannot honor before any mutation
+# control: existing refusal still works
+ok - fm-spawn.sh --backend t3code claude: refuses config/launch-env-allowlist=HOME it cannot honor before any mutation
+# adversarial: comment-only file must not refuse a claude t3code spawn
+comment-only claude t3code spawn exit=0
+spawned t3cfgzcomment1011c35e3 harness=claude kind=scout window=fm-t3cfgzcomment1011c35e3 worktree=/private/var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T/fm-backend-t3code-tests.OjhU2P/spawn-comment-only/spawn-wt
+# adversarial: codex harness ignores the file
+codex t3code spawn with plugin file exit=0
+spawned t3cfgzcodexplug1011c35e3 harness=codex kind=scout window=fm-t3cfgzcodexplug1011c35e3 worktree=/private/var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T/fm-backend-t3code-tests.OjhU2P/spawn-codex-plugins/spawn-wt

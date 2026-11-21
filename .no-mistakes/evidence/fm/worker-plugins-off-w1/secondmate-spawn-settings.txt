@@ -1,0 +1,7 @@
+secondmate spawn exit: 0
+spawned sm-claude harness=claude kind=secondmate mode=secondmate yolo=off window=firstmate:fm-sm-claude worktree=/private/var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T/fmcap/sm.Uhfy/sm
+--- launch --settings argument:
+--settings '/private/var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T/fmcap/sm.Uhfy/primary/state/sm-claude.claude-settings.json'
+--- enabledPlugins in state/sm-claude.claude-settings.json:
+{"mk-tools@cc-plugins":false}
+--- inherited into secondmate config: <not present>

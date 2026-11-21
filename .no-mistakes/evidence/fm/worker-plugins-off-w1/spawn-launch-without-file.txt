@@ -1,0 +1,4 @@
+spawn exit: 0
+spawned demo-task-z9 harness=claude kind=scout window=firstmate:fm-demo-task-z9 worktree=/var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T//fmcap/case.IUjU/pool
+--- launch line:
+claude --dangerously-skip-permissions --add-dir '/private/var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T/fmcap/case.IUjU/home/state/operational-inbox' --add-dir '/private/var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T/fmcap/case.IUjU/home/state/demo-task-z9.inbox' --add-dir '/private/var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T/fmcap/case.IUjU/home/data/demo-task-z9' --add-dir '{run-worktree}/.agents/skills' --settings '{"feedbackDrafts":"off","attribution":{"commit":"","pr":"","sessionUrl":false}}'

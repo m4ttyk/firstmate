@@ -1,0 +1,10 @@
+input=mk-tools@cc-plugins$'\r'
+exit=0 out=,"enabledPlugins":{"mk-tools@cc-plugins":false}
+input=mk\'tools@x\"\},\"hooks\":\{\}
+exit=1 out=error: /var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T//fmcap/adv.KC7X/claude-worker-disabled-plugins line 1: 'mk'tools@x"},"hooks":{}' is not a plugin id of the form <plugin>@<marketplace>
+input=\ \ mk-tools@cc-plugins\ \ \#\ trailing
+exit=1 out=error: /var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T//fmcap/adv.KC7X/claude-worker-disabled-plugins line 1: 'mk-tools@cc-plugins  # trailing' is not a plugin id of the form <plugin>@<marketplace>
+input=mk-tools@cc-plugins$'\n'mk-tools@cc-plugins
+exit=0 out=,"enabledPlugins":{"mk-tools@cc-plugins":false,"mk-tools@cc-plugins":false}
+input=@cc-plugins
+exit=1 out=error: /var/folders/sx/r6jyrg8x0ls1_mjv_h5ndt8r0000gn/T//fmcap/adv.KC7X/claude-worker-disabled-plugins line 1: '@cc-plugins' is not a plugin id of the form <plugin>@<marketplace>

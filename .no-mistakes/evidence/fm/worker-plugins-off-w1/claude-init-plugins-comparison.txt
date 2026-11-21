@@ -1,0 +1,5 @@
+# real claude 2.1.323 -p --output-format stream-json init event, plugins loaded
+## control: --settings without enabledPlugins (spawn without file)
+{"output_style":"default","plugins":["plannotator","crit","plannotator-effective-html","ponytail","swift-lsp","mp","mk-tools","mk-skills","design","cc-plugin-agents-md","cc-plugin-telemetry","cc-plugin-privacy","cc-plugin-plugin-authoring"]}
+## with: exact --settings fm-spawn produced for mk-tools@cc-plugins
+{"output_style":"default","plugins":["plannotator","crit","plannotator-effective-html","ponytail","swift-lsp","mp","mk-skills","design","cc-plugin-agents-md","cc-plugin-telemetry","cc-plugin-privacy","cc-plugin-plugin-authoring"]}

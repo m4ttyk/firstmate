@@ -454,6 +454,10 @@
       "audience": "operator-current"
     },
     {
+      "path": "docs/claude-worker-plugins.md",
+      "audience": "operator-current"
+    },
+    {
       "path": "docs/overlays.md",
       "audience": "operator-current"
     },
